@@ -25,12 +25,12 @@ def train(model, dataset, epochs, batch_size=1000, use_scheduler=False, savemode
     """
     print("Initializing...")
     model = model.cuda()
-    optim = torch.optim.Adam(model.parameters(), lr=0.01, weight_decay=1e-10)
+    optim = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-15)
     if use_scheduler:
-        scheduler = torch.optim.lr_scheduler.StepLR(optim, step_size=10, gamma=0.5)
+        #scheduler = torch.optim.lr_scheduler.StepLR(optim, step_size=10, gamma=0.5)
         # I have experimented with other supposedly better schedulers before, they don't work as well
         # try this one if you'd like:
-        # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optim, T_max=10, eta_min=1e-14)
+        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optim, T_max=10, eta_min=1e-14)
     bne = torch.nn.BCELoss()
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
     

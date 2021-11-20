@@ -46,7 +46,7 @@ class MandelbrotDataSet(Dataset):
     ymin (float): minimum y value for points
     ymax (float): maximum y value for points
     """
-    def __init__(self, size=1000, max_depth=50, xmin=-2.5, xmax=1.0, ymin=-1.1, ymax=1.1):
+    def __init__(self, size=1000, max_depth=200, xmin=-2.5, xmax=1.0, ymin=-1.1, ymax=1.1):
         self.inputs = []
         self.outputs = []
         print("Generating Dataset")

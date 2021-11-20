@@ -1,3 +1,5 @@
+import torch
+
 from src.videomaker import renderMandelbrot, renderModel, VideoMaker
 from src.training import train
 from src.dataset import MandelbrotDataSet
@@ -42,16 +44,20 @@ def example_render_model():
     # saves a 4k image
     model = models.Simple().cuda()
     # model.load_state_dict(torch.load('./models/autosave.pt')) # you need to have a model with this name
-    plt.imsave("./captures/images/render.png", renderModel(model, 3840, 2160), vmin=0, vmax=1, cmap='gray')
+    plt.imsave("./captures/render.png", renderModel(model, 3840, 2160), vmin=0, vmax=1, cmap='gray')
 
 
 def example_train_capture():
     # we will caputre 480x480 video with new frame every 3 epochs
-    vidmaker = VideoMaker(dims=(480, 480), capture_rate=3)
+    vidmaker = VideoMaker(dims=(512, 512), capture_rate=3)
 
-    model = models.Simple()
-    dataset = MandelbrotDataSet(100000)
-    train(model, dataset, 10, batch_size=8000, vm=vidmaker)
+    model = models.Simple(hidden_size=100,num_hidden_layers=10)
+    dataset = MandelbrotDataSet(400000)
+#    train(model, dataset, 50, batch_size=20000, use_scheduler=True, vm=vidmaker)
+    train(model, dataset, 50, batch_size=1000, use_scheduler=False, vm=None)
+    model.load_state_dict(torch.load('./models/autosave.pt')) # you need to have a model with this name
+    plt.imsave("./captures/render.png", renderModel(model, 1024, 1024), vmin=0, vmax=1, cmap='gray')
+
 
 
 if __name__ == "__main__":

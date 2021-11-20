@@ -11,13 +11,13 @@ class Simple(nn.Module):
   hidden_size (float): number of parameters per hidden layer
   num_hidden_layers (float): number of hidden layers
   """
-  def __init__(self, hidden_size=100, num_hidden_layers=7, init_size=2):
+  def __init__(self, hidden_size=100, num_hidden_layers=20, init_size=2):
     super(Simple,self).__init__()
     layers = [nn.Linear(init_size, hidden_size),
-              nn.ReLU()]
+              nn.LeakyReLU()]
     for _ in range(num_hidden_layers):
       layers.append(nn.Linear(hidden_size, hidden_size))
-      layers.append(nn.ReLU())
+      layers.append(nn.LeakyReLU())
     layers.append(nn.Linear(hidden_size, 1))
     layers.append(nn.Sigmoid())
 

@@ -54,7 +54,7 @@ def example_train_capture():
     model = models.Simple(hidden_size=100,num_hidden_layers=10)
     dataset = MandelbrotDataSet(100000)
 #    train(model, dataset, 50, batch_size=20000, use_scheduler=True, vm=vidmaker)
-    train(model, dataset, 200, batch_size=1000, use_scheduler=False, vm=vidmaker)
+    train(model, dataset, 500, batch_size=1000, use_scheduler=False, vm=vidmaker)
     model.load_state_dict(torch.load('./models/autosave.pt')) # you need to have a model with this name
     plt.imsave("./captures/render.png", renderModel(model, 1024, 1024), vmin=0, vmax=1, cmap='gray')
 

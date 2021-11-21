@@ -61,7 +61,7 @@ def renderModel(model, resx, resy, xmin=-2.4, xmax=1, yoffset=0, linspace=None, 
         if linspace is None:
             linspace = generateLinspace(resx, resy, xmin, xmax, yoffset)
         
-        linspace = linspace.cuda()
+        linspace = linspace.cpu()
         
         if not max_gpu:
             # slices each row of the image into batches to be fed into the nn.
@@ -79,19 +79,19 @@ def renderModel(model, resx, resy, xmin=-2.4, xmax=1, yoffset=0, linspace=None, 
 
         im = torch.clamp(im, 0, 1) # doesn't add weird pure white artifacts
         linspace = linspace.cpu()
-        torch.cuda.empty_cache()
+#        torch.cpu.empty_cache()
         model.train()
         return im.squeeze().cpu().numpy()
 
 
 def generateLinspace(resx, resy, xmin=-2.4, xmax=1, yoffset=0):
     iteration = (xmax-xmin)/resx
-    X = torch.arange(xmin, xmax, iteration).cuda()
+    X = torch.arange(xmin, xmax, iteration).cpu()
     y_max = iteration * resy/2
     Y = torch.arange(-y_max-yoffset,  y_max-yoffset, iteration)
     linspace = []
     for y in Y:
-        ys = torch.ones(len(X)).cuda() * y
+        ys = torch.ones(len(X)).cpu() * y
         points = torch.stack([X, ys], 1)
         linspace.append(points)
     return torch.stack(linspace, 0)

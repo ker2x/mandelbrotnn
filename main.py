@@ -49,12 +49,12 @@ def example_render_model():
 
 def example_train_capture():
     # we will caputre 480x480 video with new frame every 3 epochs
-    vidmaker = VideoMaker(dims=(512, 512), capture_rate=3)
+    vidmaker = VideoMaker(dims=(512, 512), capture_rate=30)
 
     model = models.Simple(hidden_size=100,num_hidden_layers=10)
-    dataset = MandelbrotDataSet(400000)
+    dataset = MandelbrotDataSet(100000)
 #    train(model, dataset, 50, batch_size=20000, use_scheduler=True, vm=vidmaker)
-    train(model, dataset, 50, batch_size=1000, use_scheduler=False, vm=None)
+    train(model, dataset, 200, batch_size=1000, use_scheduler=False, vm=vidmaker)
     model.load_state_dict(torch.load('./models/autosave.pt')) # you need to have a model with this name
     plt.imsave("./captures/render.png", renderModel(model, 1024, 1024), vmin=0, vmax=1, cmap='gray')
 

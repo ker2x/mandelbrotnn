@@ -55,7 +55,7 @@ class SkipConn(nn.Module):
 
   def forward(self, x):
     cur = self.inLayer(x)
-    prev = torch.tensor([]).cuda()
+    prev = torch.tensor([]).cpu()
     for layer in self.hidden:
       combined = torch.cat([prev, cur, x], 1)
       prev = cur
@@ -111,8 +111,8 @@ class Fourier(nn.Module):
       batch_size = x.shape[0]
       self._temp_m = torch.stack([self._temp_m[0] for _ in range(batch_size)])
       self._temp_b = torch.stack([self._temp_b[0] for _ in range(batch_size)])
-    m = self._temp_m.cuda()
-    b = self._temp_b.cuda()
+    m = self._temp_m.cpu()
+    b = self._temp_b.cpu()
 
     return m*x + b
 

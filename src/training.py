@@ -24,8 +24,9 @@ def train(model, dataset, epochs, batch_size=1000, use_scheduler=False, savemode
         Defaults to None.
     """
     print("Initializing...")
-    model = model.cuda()
-    optim = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-15)
+
+    model = model.cpu()
+    optim = torch.optim.Adam(model.parameters(), lr=0.002, weight_decay=1e-15)
     if use_scheduler:
         #scheduler = torch.optim.lr_scheduler.StepLR(optim, step_size=10, gamma=0.5)
         # I have experimented with other supposedly better schedulers before, they don't work as well
@@ -44,7 +45,7 @@ def train(model, dataset, epochs, batch_size=1000, use_scheduler=False, savemode
         for i, (inputs, outputs) in enumerate(loader):
             if vm is not None and tot_iterations%vm.capture_rate==0:
                 vm.generateFrame(model)
-            inputs, outputs = inputs.cuda(), outputs.cuda()
+            inputs, outputs = inputs.cpu(), outputs.cpu()
 
             optim.zero_grad()
 
@@ -58,7 +59,7 @@ def train(model, dataset, epochs, batch_size=1000, use_scheduler=False, savemode
             loop.update(1)
             tot_iterations+=1
             inputs, outputs = inputs.cpu(), outputs.cpu()
-            torch.cuda.empty_cache()
+#            torch.cpu.empty_cache()
         loop.close()
         avg_losses.append(tot_loss/len(loader))
 
